@@ -77,9 +77,9 @@ def show_pokemon(request, pokemon_id):
         "title_en": requested_pokemon.title_en,
         "title_jp": requested_pokemon.title_jp,
         "description": requested_pokemon.description,
-        "img_url": requested_pokemon.photo.url,
         "next_evolution": pokemon_next_evolution_dict,
         "previous_evolution": pokemon_previous_evolution_dict
+        "img_url": requested_pokemon.picture.url,
     }
 
     folium_map = folium.Map(location=MOSCOW_CENTER, zoom_start=12)
@@ -88,8 +88,8 @@ def show_pokemon(request, pokemon_id):
             folium_map,
             pokemon_entity.lat,
             pokemon_entity.lon,
-            pokemon.title_ru,
-            request.build_absolute_uri(pokemon.photo.url)
+            requested_pokemon.title_ru,
+            request.build_absolute_uri(requested_pokemon.picture.url)
         )
 
     return render(request, "pokemon.html", context={'map': folium_map._repr_html_(),
