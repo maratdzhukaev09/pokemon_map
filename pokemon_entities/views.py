@@ -54,32 +54,33 @@ def show_pokemon(request, pokemon_id):
     except Pokemon.DoesNotExist:
         return HttpResponseNotFound('<h1>Такой покемон не найден</h1>')
 
-    pokemon_next_evolution_dict = None
-    pokemon_previous_evolution_dict = None
+
+    pokemon_next_evolution_info = None
+    pokemon_previous_evolution_info = None
     pokemon_next_evolution = requested_pokemon.next_evolution.first()
     pokemon_previous_evolution = requested_pokemon.previous_evolution
     if pokemon_next_evolution:
-        pokemon_next_evolution_dict = {
+        pokemon_next_evolution_info = {
             "title_ru": pokemon_next_evolution.title_ru,
             "pokemon_id": pokemon_next_evolution.id,
             "img_url": pokemon_next_evolution.picture.url
         }
     if pokemon_previous_evolution:
-        pokemon_previous_evolution_dict = {
+        pokemon_previous_evolution_info = {
             "title_ru": pokemon_previous_evolution.title_ru,
             "pokemon_id": pokemon_previous_evolution.id,
             "img_url": pokemon_previous_evolution.url
         }
 
-    pokemon_dict = {
+    pokemon_info = {
         "pokemon_id": requested_pokemon.id,
         "title_ru": requested_pokemon.title_ru,
         "title_en": requested_pokemon.title_en,
         "title_jp": requested_pokemon.title_jp,
         "description": requested_pokemon.description,
-        "next_evolution": pokemon_next_evolution_dict,
-        "previous_evolution": pokemon_previous_evolution_dict
         "img_url": requested_pokemon.picture.url,
+        "next_evolution": pokemon_next_evolution_info,
+        "previous_evolution": pokemon_previous_evolution_info
     }
 
     folium_map = folium.Map(location=MOSCOW_CENTER, zoom_start=12)
@@ -93,4 +94,4 @@ def show_pokemon(request, pokemon_id):
         )
 
     return render(request, "pokemon.html", context={'map': folium_map._repr_html_(),
-                                                    'pokemon': pokemon_dict})
+                                                    'pokemon': pokemon_info})
